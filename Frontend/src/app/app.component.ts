@@ -3,11 +3,18 @@ import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ButtonModule, MenubarModule], // Importe os módulos do PrimeNG aqui
+  imports: [
+    RouterOutlet, 
+    ButtonModule, 
+    MenubarModule, 
+    CommonModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
