@@ -58,6 +58,9 @@ namespace Faturamento.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<decimal>("ValorTotal")
+                        .HasColumnType("decimal(65,30)");
+
                     b.HasKey("Id");
 
                     b.ToTable("NotasFiscais");

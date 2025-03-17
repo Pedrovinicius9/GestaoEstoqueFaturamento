@@ -5,6 +5,7 @@ public class NotaFiscalDTO
     public string NumeroNota { get; set; }
 
     public string Data { get; set; }
+    public decimal ValorTotal { get; set; }
     public List<ItemNotaFiscalDTO> Itens { get; set; } = new();
 }
 

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Faturamento.Migrations
 {
     [DbContext(typeof(FaturamentoContext))]
-    [Migration("20250317153005_AdicionarColunaData")]
+    [Migration("20250317190138_AdicionarColunaData")]
     partial class AdicionarColunaData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,6 +59,9 @@ namespace Faturamento.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<decimal>("ValorTotal")
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
 

@@ -41,7 +41,8 @@ public class NotasFiscaisController : ControllerBase
         {
             NumeroNota = notaFiscalDTO.NumeroNota,
             Status = "aberto",
-            Data = notaFiscalDTO.Data
+            Data = notaFiscalDTO.Data,
+            ValorTotal = notaFiscalDTO.ValorTotal
         };
 
         foreach (var itemDTO in notaFiscalDTO.Itens)
@@ -92,7 +93,7 @@ public class NotasFiscaisController : ControllerBase
         {
             return BadRequest(new
             {
-                Message = "Saldo insuficiente para os seguintes produtos:",
+                Message = "Produtos com saldo insuficiente:",
                 Produtos = produtosComSaldoInsuficiente
             });
         }
