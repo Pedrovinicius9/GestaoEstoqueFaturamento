@@ -31,34 +31,30 @@ public class NotasFiscaisController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CriarNotaFiscal([FromBody] NotaFiscalDTO notaFiscalDTO)
     {
-        // Validar se o número da nota já existe
         if (_context.NotasFiscais.Any(n => n.NumeroNota == notaFiscalDTO.NumeroNota))
             return BadRequest("Número da nota já existe.");
 
-        // Validar se há pelo menos um item
         if (notaFiscalDTO.Itens == null || !notaFiscalDTO.Itens.Any())
             return BadRequest("A nota fiscal deve ter pelo menos um item.");
 
-        // Criar a nota fiscal
         var notaFiscal = new NotaFiscal
         {
             NumeroNota = notaFiscalDTO.NumeroNota,
-            Status = "aberto"
+            Status = "aberto",
+            Data = notaFiscalDTO.Data
         };
 
-        // Adicionar os itens à nota fiscal
         foreach (var itemDTO in notaFiscalDTO.Itens)
         {
             var item = new ItemNotaFiscal
             {
                 ProdutoId = itemDTO.ProdutoId,
                 Quantidade = itemDTO.Quantidade,
-                NotaFiscalId = notaFiscal.Id // Relacionamento com a nota fiscal
+                NotaFiscalId = notaFiscal.Id 
             };
             notaFiscal.Itens.Add(item);
         }
 
-        // Salvar a nota fiscal e os itens no banco de dados
         _context.NotasFiscais.Add(notaFiscal);
         await _context.SaveChangesAsync();
 
@@ -68,7 +64,6 @@ public class NotasFiscaisController : ControllerBase
     [HttpPost("{id}/imprimir")]
     public async Task<IActionResult> ImprimirNotaFiscal(int id)
     {
-        // Buscar a nota fiscal pelo ID
         var notaFiscal = await _context.NotasFiscais
             .Include(n => n.Itens)
             .FirstOrDefaultAsync(n => n.Id == id);
@@ -79,7 +74,6 @@ public class NotasFiscaisController : ControllerBase
         if (notaFiscal.Status != "aberto")
             return BadRequest("A nota fiscal já foi baixada.");
 
-        // Verificar o saldo de cada item
         var produtosComSaldoInsuficiente = new List<string>();
 
         foreach (var item in notaFiscal.Itens)
@@ -94,7 +88,6 @@ public class NotasFiscaisController : ControllerBase
             }
         }
 
-        // Se houver produtos com saldo insuficiente, retornar erro
         if (produtosComSaldoInsuficiente.Any())
         {
             return BadRequest(new
@@ -104,7 +97,6 @@ public class NotasFiscaisController : ControllerBase
             });
         }
 
-        // Dar baixa no estoque dos produtos
         foreach (var item in notaFiscal.Itens)
         {
             var produto = await _estoqueContext.Produtos.FindAsync(item.ProdutoId);
@@ -112,11 +104,9 @@ public class NotasFiscaisController : ControllerBase
             _estoqueContext.Produtos.Update(produto);
         }
 
-        // Atualizar o status da nota fiscal para "baixada"
         notaFiscal.Status = "baixada";
         _context.NotasFiscais.Update(notaFiscal);
 
-        // Salvar as alterações no banco de dados
         await _context.SaveChangesAsync();
         await _estoqueContext.SaveChangesAsync();
 

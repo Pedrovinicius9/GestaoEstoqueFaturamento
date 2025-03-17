@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Faturamento.Migrations
 {
-    public partial class CriarTabelasNotaFiscalEItens : Migration
+    public partial class AdicionarColunaData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,6 +21,8 @@ namespace Faturamento.Migrations
                     NumeroNota = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Status = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Data = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -37,7 +39,7 @@ namespace Faturamento.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ProdutoId = table.Column<int>(type: "int", nullable: false),
                     Quantidade = table.Column<int>(type: "int", nullable: false),
-                    NotaFiscalId = table.Column<int>(type: "int", nullable: true)
+                    NotaFiscalId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,7 +48,8 @@ namespace Faturamento.Migrations
                         name: "FK_ItemNotaFiscal_NotasFiscais_NotaFiscalId",
                         column: x => x.NotaFiscalId,
                         principalTable: "NotasFiscais",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
