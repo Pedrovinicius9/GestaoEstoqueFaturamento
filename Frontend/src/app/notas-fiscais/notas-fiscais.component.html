@@ -1,1 +1,202 @@
-<p>notas-fiscais works!</p>
+<div 
+  *ngIf="loading == false"       
+  class="row" 
+  style="min-width: 50rem; 
+         max-width: 100rem; 
+         margin-left: auto; 
+         margin-right: auto; 
+         margin-top: 6rem;"
+>
+  <p-table 
+    #dt2
+    [value]="notas" 
+    [tableStyle]="{'margin-top': '1rem'}"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex space-between" style="display: flex; justify-content: space-between;">
+              <input 
+                  pInputText 
+                  type="text" 
+                  (input)="filtrarProdutos($event)" 
+                  placeholder="Buscar notas" />
+        <p-button icon="pi pi-plus" label="Nova nota" severity="contrast" (onClick)="showDialog()"/>
+      </div>
+  </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="text-align: left;">Nr. nota</th>
+        <th style="text-align: center;">Data de lançamento</th>
+        <th style="text-align: right;">Valor total</th>
+        <th style="text-align: center;">Status</th>
+        <th style="text-align: right;"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-nota>
+      <tr>
+        <td style="text-align: left;">{{nota.numeroNota}}</td>
+        <td style="text-align: center;">{{nota.data}}</td>
+        <td style="text-align: right;">{{nota.valorTotal | currency:'BRL':'symbol':'1.2-2'}}</td>
+        <!-- <td style="text-align: center;">{{nota.status.toUpperCase()}}</td> -->
+        <td style="text-align: center;">
+          <div [ngClass]="nota.status === 'aberto' ? 'aberto' : 'baixada'">
+            {{nota.status.toUpperCase()}}
+          </div>
+        </td>
+        <td style="text-align: right;">
+          <button 
+            pButton 
+            pRipple 
+            type="button" 
+            icon="pi pi-eye" 
+            (click)="showDialogNota(nota)"
+            class="p-button-rounded p-button-text">
+          </button>
+          <button 
+            pButton 
+            pRipple 
+            type="button" 
+            icon="pi pi-download" 
+            (click)="showDialogBaixa(nota)"
+            class="p-button-rounded p-button-text"
+            [disabled]="nota.status != 'aberto' "
+          >
+          </button>
+        </td>
+        
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- Dialog de cadastro de nota -->
+  <p-dialog 
+    header="Nova nota" 
+    [modal]="true" 
+    [draggable]="false" 
+    [(visible)]="visible" 
+    [style]="{ width: '50rem', height: '40rem' }"
+  >
+    <span 
+      class="p-text-secondary block mb-5" 
+      style="display: flex; justify-content: space-around; margin-bottom: 10px;"
+    >   
+      Adicione as informações da nota.
+    </span>
+    <div class="gap-3" style="display: flex; justify-content: space-around; margin: 5px;">
+      <div class="flex flex-wrap gap-4 mb-5">
+        <div style="display: flex; flex-direction: column; margin: 5px;">
+          <label for="data" class="font-semibold mb-2">Data de lançamento*</label>
+          <input pInputText id="data" [(ngModel)]="data" class="w-full p-2" autocomplete="off" disabled />
+        </div>
+
+        <div *ngFor="let item of produtosSelecionados; let i = index" class="product-item">
+          <div style="display: flex; flex-direction: column; margin: 5px;">
+            <label class="font-semibold mb-2">Produto {{i + 1}}*</label>
+            <p-treeSelect
+              class="md:w-20rem w-full"
+              containerStyleClass="w-full"
+              [(ngModel)]="item.produtoId"
+              [options]="getProdutosDisponiveis(i)"
+              placeholder="Selecione o produto"
+              selectionMode="single"
+              [filter]="true">
+            </p-treeSelect>
+            
+            <div *ngIf="item.produtoId" style="display: flex; flex-direction: column; margin: 5px;">
+              <label class="font-semibold mb-2">Quantidade*</label>
+              <p-inputNumber 
+                [(ngModel)]="item.quantidade" 
+                [showButtons]="true" 
+                [min]="1"
+                placeholder="Informe a quantidade">
+              </p-inputNumber>
+            </div>
+          </div>
+        </div>
+      
+        <div style="display: flex; flex-direction: column; margin: 5px;">
+          <p-button 
+            label="Adicionar mais produtos" 
+            icon="pi pi-plus" 
+            (onClick)="adicionarNovoProduto()">
+          </p-button>
+        </div>
+      </div>
+    </div>
+    
+    <div style="display: flex; justify-content: end;" >
+      <p-button label="Cancelar" severity="secondary" (onClick)="fecharDialog()" [style]="{ margin: '5px' }" />
+      <p-button label="Salvar" (onClick)="salvarNota()" [style]="{ margin: '5px' }" [disabled]="!data "/>
+    </div>
+  </p-dialog>
+
+  <!-- Dialog para baixar nota -->
+  <p-dialog 
+    header="Baixar nota" 
+    [modal]="true" 
+    [draggable]="false" 
+    [(visible)]="dialogBaixa" 
+    [style]="{ width: '50rem', height: '28rem' }"
+  >
+    <div class="row" style="display: flex; justify-content: center; margin: 2px;">
+      <h1>Deseja baixar essa nota? </h1>
+    </div>
+    <div class="row" style="display: flex; justify-content: center; margin: 2px;">
+      <span>Numero da nota: {{notaSelecionada?.numeroNota}}</span>
+    </div>
+    <div class="row" style="display: flex; justify-content: center; margin: 2px;">
+      <span>Data de lançamento: {{notaSelecionada?.data}}</span>
+    </div>
+    <div class="row" style="display: flex; justify-content: center; flex-direction: column; align-items: center; margin: 2px;">
+      <span>Produtos:</span>
+      <span *ngFor="let item of notaSelecionada?.itens">
+        {{ getProdutoNome(item.produtoId) }} - Quantidade: {{ item.quantidade }} - Valor: {{ getValorProduto(item.produtoId, item.quantidade) | currency:'BRL':'symbol':'1.2-2' }}
+      </span>
+      <span style="margin-top: 10px; font-weight: bold;">
+        Valor Total: {{ getValorTotal() | currency:'BRL':'symbol':'1.2-2' }}
+      </span>
+    </div>
+    
+    <div style="display: flex; justify-content: center; margin-top: 50px;" >
+      <p-button label="Cancelar" severity="secondary" (onClick)="fecharDialog()" [style]="{ margin: '5px' }" />
+      <p-button 
+      label="Baixar" 
+      (click)="baixarNota(notaSelecionada?.numeroNota)" 
+      [style]="{ margin: '5px' }" 
+      [disabled]="!notaSelecionada">
+    </p-button>
+    </div>
+  </p-dialog>
+
+  <!-- Dialog para visualizar a nota -->
+  <p-dialog  
+    [modal]="true" 
+    [draggable]="false" 
+    [(visible)]="dialogNota" 
+    [style]="{ width: '50rem', height: '25rem' }"
+  >
+    <div class="row" style="display: flex; justify-content: center; margin: 2px;">
+      <h1>Nota: {{notaSelecionada?.numeroNota}} </h1>
+    </div>
+    <div class="row" style="display: flex; justify-content: center; margin: 2px;">
+      <span>Data de lançamento: {{notaSelecionada?.data}}</span>
+    </div>
+    <div class="row" style="display: flex; justify-content: center; flex-direction: column; align-items: center; margin: 2px;">
+      <span>Produtos:</span>
+      <span *ngFor="let item of notaSelecionada?.itens">
+        {{ getProdutoNome(item.produtoId) }} - Quantidade: {{ item.quantidade }} - Valor: {{ getValorProduto(item.produtoId, item.quantidade) | currency:'BRL':'symbol':'1.2-2' }}
+      </span>
+      <span style="margin-top: 10px; font-weight: bold;">
+        Valor Total: {{ getValorTotal() | currency:'BRL':'symbol':'1.2-2' }}
+      </span>
+    </div>
+
+  </p-dialog>
+</div>
+
+<div style="display: flex; justify-content: center; align-items: center; margin-top: 20rem;">
+  <p-progressSpinner ariaLabel="loading" *ngIf="loading"></p-progressSpinner>
+</div>
+
+<div class="card" style="position: fixed; top: 55px; right: 20px; z-index: 1000; width: 460px;">
+  <p-messages [(value)]="messages" [enableService]="false" />
+</div>

@@ -1,0 +1,28 @@
+:host ::ng-deep .p-treeselect {
+  width: 100%;
+  min-height: 45px;
+}
+
+:host ::ng-deep .p-treeselect-label-container {
+  height: 100%;
+}
+
+:host ::ng-deep .p-treeselect-label {
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+:host ::ng-deep .p-treeselect-trigger {
+  width: 3rem;
+  padding: 0 0.75rem;
+}
+
+.baixada {
+  font-weight: 700;
+  color: #66bb6a;
+}
+
+.aberto {
+  font-weight: 700;
+  color: #ffa726;
+}
