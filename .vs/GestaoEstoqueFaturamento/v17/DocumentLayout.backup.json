@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Microsservicos\\Teste Korp\\GestaoEstoqueFaturamento\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{899F4AA0-1F95-4BDE-9AED-7795EC1475A6}|ControleEstoque\\ControleEstoque.csproj|c:\\microsservicos\\teste korp\\gestaoestoquefaturamento\\controleestoque\\controllers\\produtoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{899F4AA0-1F95-4BDE-9AED-7795EC1475A6}|ControleEstoque\\ControleEstoque.csproj|solutionrelative:controleestoque\\controllers\\produtoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1923DAE5-C540-4FAB-A8A9-33FB258EAA49}|Faturamento\\Faturamento.csproj|c:\\microsservicos\\teste korp\\gestaoestoquefaturamento\\faturamento\\controllers\\notasfiscaiscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1923DAE5-C540-4FAB-A8A9-33FB258EAA49}|Faturamento\\Faturamento.csproj|solutionrelative:faturamento\\controllers\\notasfiscaiscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "NotasFiscaisController.cs",
+              "DocumentMoniker": "C:\\Microsservicos\\Teste Korp\\GestaoEstoqueFaturamento\\Faturamento\\Controllers\\NotasFiscaisController.cs",
+              "RelativeDocumentMoniker": "Faturamento\\Controllers\\NotasFiscaisController.cs",
+              "ToolTip": "C:\\Microsservicos\\Teste Korp\\GestaoEstoqueFaturamento\\Faturamento\\Controllers\\NotasFiscaisController.cs",
+              "RelativeToolTip": "Faturamento\\Controllers\\NotasFiscaisController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T05:40:51.875Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProdutosController.cs",
+              "DocumentMoniker": "C:\\Microsservicos\\Teste Korp\\GestaoEstoqueFaturamento\\ControleEstoque\\Controllers\\ProdutosController.cs",
+              "RelativeDocumentMoniker": "ControleEstoque\\Controllers\\ProdutosController.cs",
+              "ToolTip": "C:\\Microsservicos\\Teste Korp\\GestaoEstoqueFaturamento\\ControleEstoque\\Controllers\\ProdutosController.cs",
+              "RelativeToolTip": "ControleEstoque\\Controllers\\ProdutosController.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAwBgAAABRAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T05:40:45.381Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
