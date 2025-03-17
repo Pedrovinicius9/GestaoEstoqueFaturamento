@@ -6,9 +6,14 @@ import { CommonModule } from '@angular/common';
 import { ApiService } from '../api.service';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { Table } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { Message } from 'primeng/api';
+import { MessagesModule } from 'primeng/messages';
+
 // import { InputIconModule } from 'primeng/inputicon';
 
 @Component({
@@ -19,8 +24,11 @@ import { FormsModule } from '@angular/forms';
     CommonModule, 
     ButtonModule,
     InputTextModule,
+    InputNumberModule,
     DialogModule,
-    FormsModule
+    FormsModule,
+    ProgressSpinnerModule,
+    MessagesModule,
   ],
   templateUrl: './produtos.component.html',
   styleUrl: './produtos.component.css'
@@ -30,11 +38,14 @@ export class Produtos implements OnInit {
   produtos: Produto[] = [];
   globalFilterFields: string[] = ['id', 'nome', 'codigoSKU', 'precoUnitario'];
 
+  messages: Message[] = [];
+
+  loading: boolean = true;
   visible: boolean = false;
 
   descricao: string = '';
   sku: string = '';
-  preco: number = 0;
+  preco: number = null || 0;
   quantidade: number = 0;
 
   constructor(private apiService: ApiService) {}
@@ -48,6 +59,7 @@ export class Produtos implements OnInit {
     try {
       this.produtos = [];
       this.produtos = await this.apiService.getProdutos();
+      this.loading = false;
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
     }
@@ -59,6 +71,8 @@ export class Produtos implements OnInit {
   }
 
   async salvarProduto() {
+    this.loading = true;
+
     try {
       const maxId = this.produtos.length > 0 ? Math.max(...this.produtos.map(produto => produto.id)) : 0;
 
@@ -79,12 +93,22 @@ export class Produtos implements OnInit {
 
       this.getProdutos();
 
+      this.messages = [
+        {severity:'success', summary: 'Sucesso', detail:'Produto cadastrado com sucesso!', life: 3000},
+      ];
+
+      this.loading = false;
       this.visible = false; 
 
     } catch (error) {
       console.error('Erro ao cadastrar produto:', error);
-    }
 
+      this.messages = [
+        {severity:'error', summary: 'Erro', detail:'Erro ao cadastrar produto!', life: 3000},
+      ];
+
+      this.loading = false;
+    }
   }
 
   fecharDialog() {  
@@ -98,6 +122,5 @@ export class Produtos implements OnInit {
 
   showDialog() {
     this.visible = true;
-  }
-  
+  } 
 }

@@ -1,4 +1,5 @@
 <div 
+  *ngIf="loading == false"       
   class="row" 
   style="min-width: 50rem; 
          max-width: 100rem; 
@@ -12,7 +13,7 @@
     [tableStyle]="{'margin-top': '1rem'}"
   >
     <ng-template pTemplate="caption">
-      <div class="flex space-between" style="display: flex !important; justify-content: space-between !important;">
+      <div class="flex space-between" style="display: flex; justify-content: space-between;">
               <input 
                   pInputText 
                   type="text" 
@@ -35,7 +36,7 @@
         <td style="text-align: left;">{{produto.id}}</td>
         <td style="text-align: left;">{{produto.nome}}</td>
         <td style="text-align: left;">{{produto.codigoSKU}}</td>
-        <td style="text-align: right;">{{produto.precoUnitario}}</td>
+        <td style="text-align: right;">{{produto.precoUnitario | currency:'BRL':'symbol':'1.2-2'}}</td>
         <td style="text-align: right;">
           <div [ngClass]="{'outofstock': produto.saldoEstoque === 0, 'lowstock': (produto.saldoEstoque > 0 && produto.saldoEstoque < 10),'instock': produto.saldoEstoque > 10}">
             {{produto.saldoEstoque}}
@@ -63,30 +64,42 @@
       <div class="flex flex-wrap gap-4 mb-5">
         <div style="display: flex; flex-direction: column; margin: 5px;">
           <label for="descricao" class="font-semibold mb-2">Descrição*</label>
-          <input pInputText id="descricao" [(ngModel)]="descricao" class="w-full p-2" autocomplete="off" />
+          <input pInputText id="descricao" [(ngModel)]="descricao" class="w-full p-2" autocomplete="off" required />
         </div>
     
         <div style="display: flex; flex-direction: column; margin: 5px;">
           <label for="codigoSKU" class="font-semibold mb-2">SKU*</label>
-          <input pInputText id="codigoSKU" [(ngModel)]="sku" class="w-full p-2" autocomplete="off" />
+          <input pInputText id="codigoSKU" [(ngModel)]="sku" class="w-full p-2" autocomplete="off" required />
         </div>
     
         <div style="display: flex; flex-direction: column; margin: 5px;">
           <label for="precoUnitario" class="font-semibold mb-2">Preço*</label>
-          <input pInputText id="precoUnitario" [(ngModel)]="preco" class="w-full p-2" autocomplete="off" />
+          <p-inputNumber 
+            [(ngModel)]="preco"
+            mode="currency" 
+            inputId="currency-japan" 
+            currency="BRL" 
+            locale="pt-BR" />
         </div>
     
         <div style="display: flex; flex-direction: column; margin: 5px;">
           <label for="saldoEstoque" class="font-semibold mb-2">Quantidade*</label>
-          <input pInputText id="saldoEstoque" [(ngModel)]="quantidade" class="w-full p-2" autocomplete="off" />
+          <input pInputText id="saldoEstoque" [(ngModel)]="quantidade" class="w-full p-2" autocomplete="off" required />
         </div>
       </div>
     </div>
     
     <div style="display: flex; justify-content: end;" >
       <p-button label="Cancelar" severity="secondary" (onClick)="fecharDialog()" [style]="{ margin: '5px' }" />
-      <p-button label="Salvar" (onClick)="salvarProduto()" [style]="{ margin: '5px' }" />
+      <p-button label="Salvar" (onClick)="salvarProduto()" [style]="{ margin: '5px' }" [disabled]="!descricao || !sku || !preco || !quantidade"/>
     </div>
   </p-dialog>
-  
+</div>
+
+<div style="display: flex; justify-content: center; align-items: center; margin-top: 20rem;">
+  <p-progressSpinner ariaLabel="loading" *ngIf="loading"></p-progressSpinner>
+</div>
+
+<div class="card" style="position: fixed; top: 55px; right: 20px; z-index: 1000; width: 460px;">
+  <p-messages [(value)]="messages" [enableService]="false" />
 </div>
