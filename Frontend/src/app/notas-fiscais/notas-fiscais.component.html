@@ -36,7 +36,6 @@
         <td style="text-align: left;">{{nota.numeroNota}}</td>
         <td style="text-align: center;">{{nota.data}}</td>
         <td style="text-align: right;">{{nota.valorTotal | currency:'BRL':'symbol':'1.2-2'}}</td>
-        <!-- <td style="text-align: center;">{{nota.status.toUpperCase()}}</td> -->
         <td style="text-align: center;">
           <div [ngClass]="nota.status === 'aberto' ? 'aberto' : 'baixada'">
             {{nota.status.toUpperCase()}}
@@ -104,6 +103,8 @@
             <div *ngIf="item.produtoId" style="display: flex; flex-direction: column; margin: 5px;">
               <label class="font-semibold mb-2">Quantidade*</label>
               <p-inputNumber 
+                class="w-full p-2"
+                containerStyleClass="w-full"
                 [(ngModel)]="item.quantidade" 
                 [showButtons]="true" 
                 [min]="1"
@@ -125,7 +126,7 @@
     
     <div style="display: flex; justify-content: end;" >
       <p-button label="Cancelar" severity="secondary" (onClick)="fecharDialog()" [style]="{ margin: '5px' }" />
-      <p-button label="Salvar" (onClick)="salvarNota()" [style]="{ margin: '5px' }" [disabled]="!data "/>
+      <p-button label="Salvar" (onClick)="salvarNota()" [style]="{ margin: '5px' }" [disabled]="!data || !produtosSelecionados.length" />
     </div>
   </p-dialog>
 
@@ -158,11 +159,7 @@
     
     <div style="display: flex; justify-content: center; margin-top: 50px;" >
       <p-button label="Cancelar" severity="secondary" (onClick)="fecharDialog()" [style]="{ margin: '5px' }" />
-      <p-button 
-      label="Baixar" 
-      (click)="baixarNota(notaSelecionada?.numeroNota)" 
-      [style]="{ margin: '5px' }" 
-      [disabled]="!notaSelecionada">
+      <p-button label="Baixar" (click)="baixarNota(notaSelecionada?.numeroNota)" [style]="{ margin: '5px' }" [disabled]="!notaSelecionada">
     </p-button>
     </div>
   </p-dialog>

@@ -14,8 +14,6 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Message } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 
-// import { InputIconModule } from 'primeng/inputicon';
-
 @Component({
   selector: 'app-produtos',
   standalone: true,

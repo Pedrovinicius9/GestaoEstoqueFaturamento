@@ -12,7 +12,6 @@ public class FaturamentoContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Configurações das entidades
         modelBuilder.Entity<NotaFiscal>()
             .HasMany(n => n.Itens)
             .WithOne()

@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Produto } from '../models/produto.models';
 import { Nota } from '../models/nota.models';
 
 import { TableModule } from 'primeng/table';
@@ -75,7 +74,7 @@ export class NotasFiscais implements OnInit {
     this.getProdutos();
   }
 
-  async getNotas()  {
+  async getNotas() {
     try {
       this.notas = [];
       this.notas = await this.apiService.getNotas();
@@ -87,7 +86,7 @@ export class NotasFiscais implements OnInit {
     }
   }
 
-  async getProdutos()  {
+  async getProdutos() {
     try {
       this.produtos = [];
       this.produtos = await this.apiService.getProdutos();
@@ -168,7 +167,6 @@ export class NotasFiscais implements OnInit {
     try {
       const response = await this.apiService.baixarNota(Number(id));
       
-      // Check if the response indicates an error
       if (response && response.error) {
         throw new Error(response.error);
       }
@@ -220,11 +218,6 @@ export class NotasFiscais implements OnInit {
   }
 
   fecharDialog() {  
-    // this.descricao = '';
-    // this.sku = '';
-    // this.preco = 0;
-    // this.quantidade = 0;
-
     this.visible = false; 
     this.dialogBaixa = false;
   }
